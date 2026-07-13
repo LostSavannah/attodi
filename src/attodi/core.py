@@ -1,6 +1,7 @@
 from enum import IntEnum
 from typing import Any, Callable
 from collections.abc import Iterator
+from inspect import signature
 
 class ServiceLifetime(IntEnum):
     Singleton = 1
@@ -68,7 +69,12 @@ class ServiceProvider:
                     yield self.scoped_instances[d]
                     continue 
             constructor = d.service if callable(d.service) else d.concrete if d.concrete else d.cls
-            annotations = constructor.__annotations__ if callable(d.service) else constructor.__init__.__annotations__
+            method = constructor if callable(d.service) else constructor.__init__
+            arguments = list(signature(method).parameters.keys())
+            annotations = {
+                arg:method.__annotations__[arg]
+                for arg in arguments if arg in method.__annotations__
+            }
             arguments = {
                 a:self.get_service(annotations[a]) for a in annotations
             }

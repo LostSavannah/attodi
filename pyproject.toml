@@ -4,3 +4,20 @@ build-backend = "hatchling.build"
 
 [project]
 name = "attodi"
+version = "0.0.1"
+authors = [
+    { name = "Erick Fernando Mora Ramirez", email = "erickfernandomoraramirez@gmail.com"}
+]
+description = "Minimalistic DI library for python."
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "GPL-3.0"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/codeRookieErick/attodi"
+Issues = "https://github.com/codeRookieErick/attodi/issues"
