@@ -78,4 +78,3 @@ class ServiceProvider:
             elif d.lifetime == ServiceLifetime.Scoped:
                 self.scoped_instances[d] = instance
             yield instance
-
