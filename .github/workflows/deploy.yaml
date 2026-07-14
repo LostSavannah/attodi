@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup python3
         uses: actions/setup-python@v5
@@ -35,6 +37,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup python3
         uses: actions/setup-python@v5
@@ -57,8 +61,14 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
 
-      - name: Update pyproject.toml version
+      - name: Update pyproject.toml version and backmerge
         run: |
           git add ./pyproject.toml
           git commit -m "chore: update version"
           git push
+          git fetch origin dev
+          git checkout dev
+          git pull origin dev
+          git merge origin/main -X theirs --no-ff -m "chore: automatic back-merge from main [skip ci]"
+          git push origin dev
+
