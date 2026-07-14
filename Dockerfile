@@ -18,4 +18,8 @@ COPY ./tests .
 
 RUN python3 -m pytest
 
-CMD [ "python3" ]
+COPY ./project_updater.py .
+
+RUN python3 ./project_updater.py "file=./pyproject.toml" "set-version-patch=2"
+
+CMD [ "/bin/sh" ]

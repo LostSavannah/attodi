@@ -19,6 +19,7 @@ jobs:
       - name: Build release distributions
         run: |
           pip install -r requirements.txt
+          python3 ./project_updater.py "file=./pyproject.toml" "set-version-patch=${{ github.run_number }}"
           python3 -m build
 
       - name: Install and test distribution
