@@ -74,5 +74,4 @@ jobs:
           git checkout dev
           git pull origin dev
           git merge origin/main -X theirs --no-ff -m "chore: automatic back-merge from main [skip ci]"
-          
           git push origin dev
