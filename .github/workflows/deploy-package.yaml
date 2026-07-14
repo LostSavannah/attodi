@@ -28,4 +28,4 @@ jobs:
 
       - name: Deploy distribution
         run: |
-          python3 -m pytest
+          python3 -m twine upload dist/* -u __token__ -p ${{ secrets.PYPI_GLOBAL_TOKEN }}
