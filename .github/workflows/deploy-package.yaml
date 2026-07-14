@@ -20,8 +20,12 @@ jobs:
         run: |
           pip install -r requirements.txt
           python3 -m build
-          curl https://app.hooklistener.com/w/my-first-endpoint-bzjg/built
 
       - name: Install and test distribution
         run: |
-          curl https://app.hooklistener.com/w/my-first-endpoint-bzjg/testing
+          pip install $(ls ./dist/*.whl | head -n 1)
+          python3 -m pytest
+
+      - name: Deploy distribution
+        run: |
+          python3 -m pytest

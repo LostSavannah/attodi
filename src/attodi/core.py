@@ -46,6 +46,9 @@ class ServiceProvider:
         new_scope.singleton_instances = self.singleton_instances
         return new_scope
 
+    def get_optional_service[T](self, cls:type[T]) -> T|None:
+        return next(self.get_services(cls), None)
+
     def get_service[T](self, cls:type[T]) -> T:
         return next(self.get_services(cls))
 
