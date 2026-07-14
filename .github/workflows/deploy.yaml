@@ -1,4 +1,4 @@
-name: Deploy Package to Pypi
+name: Deploy Release
 
 on:
   push: 
@@ -6,7 +6,7 @@ on:
   workflow_dispatch: 
 
 jobs:
-  release-build:
+  test-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,15 +18,33 @@ jobs:
 
       - name: Build release distributions
         run: |
-          pip install -r requirements.txt
+          pip install build
           python3 ./project_updater.py "file=./pyproject.toml" "set-version-patch=${{ github.run_number }}"
           python3 -m build
 
-      - name: Install and test distribution
+      - name: Install and test release distribution
         run: |
+          pip install pytest
           pip install $(ls ./dist/*.whl | head -n 1)
           python3 -m pytest
 
-      - name: Deploy distribution
+  deploy-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build release distributions
         run: |
+          pip install build
+          python3 ./project_updater.py "file=./pyproject.toml" "set-version-patch=${{ github.run_number }}"
+          python3 -m build
+
+      - name: Deploy release distribution
+        run: |
+          pip install twine
           python3 -m twine upload dist/* -u __token__ -p ${{ secrets.PYPI_GLOBAL_TOKEN }}
