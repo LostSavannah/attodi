@@ -50,7 +50,10 @@ class ServiceProvider:
         return next(self.get_services(cls), None)
 
     def get_service[T](self, cls:type[T]) -> T:
-        return next(self.get_services(cls))
+        try:
+            return next(self.get_services(cls))
+        except StopIteration:
+            raise Exception(f"No service registered for {cls!r}") from None
 
     def get_services[T](self, cls:type[T]) -> Iterator[T]:
         if issubclass(cls, ServiceProvider):
