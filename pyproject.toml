@@ -19,5 +19,5 @@ license = "GPL-3.0"
 license-files = ["LICEN[CS]E*"]
 
 [project.urls]
-Homepage = "https://github.com/codeRookieErick/attodi"
-Issues = "https://github.com/codeRookieErick/attodi/issues"
+Homepage = "https://github.com/LostSavannah/attodi"
+Issues = "https://github.com/LostSavannah/attodi/issues"
