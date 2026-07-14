@@ -75,14 +75,6 @@ for service in provider.get_services(Person):
     ...
 ```
 
-## Development
-
-```bash
-pip install -e .
-pip install -r requirements.txt
-python -m pytest
-```
-
 ## License
 
 GPL-3.0
