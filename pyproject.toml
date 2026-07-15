@@ -21,3 +21,4 @@ license-files = ["LICEN[CS]E*"]
 [project.urls]
 Homepage = "https://github.com/LostSavannah/attodi"
 Issues = "https://github.com/LostSavannah/attodi/issues"
+Examples = "https://github.com/LostSavannah/attodi/tree/main/examples"
