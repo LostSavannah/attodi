@@ -2,6 +2,32 @@ from enum import IntEnum
 from typing import Any, Callable
 from collections.abc import Iterator
 from inspect import signature
+from functools import wraps
+
+def inject(**values):
+    def decorator(func):
+        current_signature = signature(func)
+        original_parameter_names = [p.name for p in current_signature.parameters.values()]
+        parameters = [p for p in current_signature.parameters.values()
+                      if p.name not in values]
+        
+        new_signature = current_signature.replace(parameters=parameters)
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            rargs = [*args]
+            rargs.reverse()
+            new_args = []
+            new_kwargs = {}
+            for parameter_name in original_parameter_names:
+                injected_value = values.get(parameter_name, None)
+                if len(rargs) > 0:
+                    new_args.append(injected_value if parameter_name in values else rargs.pop())
+                else:
+                    new_kwargs[parameter_name] = injected_value if parameter_name in values else kwargs.get(parameter_name, None)
+            return func(*new_args, **new_kwargs)
+        wrapper.__signature__ = new_signature
+        return wrapper
+    return decorator
 
 class ServiceLifetime(IntEnum):
     Singleton = 1
@@ -90,3 +116,10 @@ class ServiceProvider:
             elif d.lifetime == ServiceLifetime.Scoped:
                 self.scoped_instances[d] = instance
             yield instance
+
+    def inject(self, func):
+        ann = func.__annotations__
+        services = {arg:self.get_optional_service(ann[arg]) for arg in ann}
+        return inject(**{
+            arg: services[arg] for arg in services if services[arg] != None
+        })(func)
